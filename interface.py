@@ -2,10 +2,10 @@
 import tkinter as tk
 from tkinter import ttk
 
-FUNDO = "#f5f5ed"
-TEXTO = "#20392e"
-VERDE = "#234d3c"
-CLARO = "#dce9c4"
+FUNDO = "#f6f3eb"
+TEXTO = "#263e37"
+VERDE = "#173e37"
+CLARO = "#f1c97d"
 FONTE = "Arial"
 
 
@@ -13,12 +13,12 @@ def tema():
     estilo = ttk.Style()
     estilo.theme_use("clam")
     estilo.configure(".", font=(FONTE, 11))
-    estilo.configure("TEntry", padding=7, fieldbackground="white")
+    estilo.configure("TEntry", padding=8, bordercolor="#d1d7ce", lightcolor="white", darkcolor="white", fieldbackground="white")
     estilo.configure("TCombobox", padding=6, fieldbackground="white")
     estilo.map("TCombobox", fieldbackground=[("readonly", "white")])
     estilo.configure("Treeview", background="white", fieldbackground="white",
-                     foreground=TEXTO, rowheight=35, borderwidth=0)
-    estilo.configure("Treeview.Heading", background="#e0e8db", foreground=TEXTO,
+                     foreground=TEXTO, rowheight=39, borderwidth=0)
+    estilo.configure("Treeview.Heading", background="#dde6db", foreground=TEXTO,
                      padding=8, font=(FONTE, 10, "bold"), relief="flat")
     estilo.map("Treeview", background=[("selected", VERDE)], foreground=[("selected", "white")])
 
@@ -30,7 +30,7 @@ def texto(pai, mensagem, tamanho=11, negrito=False):
 
 
 def titulo(pai, nome, instrucao):
-    texto(pai, nome, 29, True).pack(fill="x", pady=(0, 5))
+    tk.Label(pai, text=nome, bg=FUNDO, fg=TEXTO, font=("Times", 31, "bold"), anchor="w").pack(fill="x", pady=(0, 4))
     texto(pai, instrucao).pack(fill="x", pady=(0, 18))
 
 
@@ -60,7 +60,7 @@ def botao(pai, nome, comando, secundario=False):
     cor = TEXTO if secundario else "white"
     tk.Button(pai, text=nome, command=comando, bg=fundo, fg=cor, relief="flat",
               activebackground="#c1d7b4", activeforeground=TEXTO, padx=14, pady=8,
-              cursor="hand2", font=(FONTE, 10, "bold")).pack(side="left", padx=(0, 8))
+              highlightthickness=0, borderwidth=0, cursor="hand2", font=(FONTE, 10, "bold")).pack(side="left", padx=(0, 8))
 
 
 def tabela(pai, colunas, linhas, altura=6):
@@ -74,6 +74,7 @@ def tabela(pai, colunas, linhas, altura=6):
     for coluna in colunas:
         grade.heading(coluna, text=coluna, anchor="w")
         grade.column(coluna, width=110, minwidth=50, anchor="w")
-    for registro in linhas:
-        grade.insert("", "end", values=registro)
+    grade.tag_configure("alternada", background="#f2f6f1")
+    for indice, registro in enumerate(linhas):
+        grade.insert("", "end", values=registro, tags=("alternada",) if indice % 2 else ())
     return grade

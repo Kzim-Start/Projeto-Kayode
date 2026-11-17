@@ -52,11 +52,17 @@ class Kayode:
         janela.minsize(990, 660)
         janela.configure(bg=FUNDO)
         tema()
-        menu = tk.Frame(janela, bg=VERDE, width=208)
+        menu = tk.Frame(janela, bg=VERDE, width=218)
         menu.pack(side="left", fill="y")
         menu.pack_propagate(False)
+        marca = tk.Canvas(menu, width=58, height=35, bg=VERDE, highlightthickness=0)
+        marca.pack(anchor="w", padx=24, pady=(25, 0))
+        # Símbolo da ponte que liga os doadores à cozinha.
+        for x in (3, 27):
+            marca.create_arc(x, 6, x+24, 43, start=0, extent=180, style="arc", outline=CLARO, width=3)
+        marca.create_line(2, 26, 53, 26, fill=CLARO, width=3)
         tk.Label(menu, text="Kayode", bg=VERDE, fg="#f3f4ce",
-                 font=(FONTE, 29, "bold")).pack(anchor="w", padx=23, pady=(26, 22))
+                 font=("Times", 28, "bold")).pack(anchor="w", padx=22, pady=(0, 20))
         self.botoes = {}
         telas = [("Parceiros", self.parceiros), ("Doações", self.doacoes),
                  ("Recebimento", self.recebimento), ("Estoque", self.estoque),
@@ -64,9 +70,9 @@ class Kayode:
                  ("Distribuição", self.distribuicao)]
         for rotulo, tela in telas:
             item = tk.Button(menu, text=rotulo, anchor="w", relief="flat", borderwidth=0,
-                             padx=13, pady=9, cursor="hand2", font=(FONTE, 12),
+                             highlightthickness=0, padx=15, pady=7, cursor="hand2", font=(FONTE, 12),
                              command=lambda t=tela: self.abrir(t))
-            item.pack(fill="x", padx=12, pady=2)
+            item.pack(fill="x", padx=14, pady=1)
             self.botoes[tela] = item
         tk.Label(menu, text="Pontes e Lacerda · MT", bg=VERDE, fg="#d4e5cd",
                  font=(FONTE, 10)).pack(side="bottom", pady=22)
@@ -241,8 +247,18 @@ class Kayode:
         acoes = linha(p)
         faixa = tk.Frame(p, bg=CLARO, padx=18, pady=10)
         faixa.pack(fill="x", pady=(4, 8))
-        resultado = texto(faixa, "Cadastre uma receita para calcular.", 19, True)
+        faixa.configure(bg=VERDE)
+        desenho = tk.Canvas(faixa, width=125, height=55, bg=VERDE, highlightthickness=0)
+        desenho.pack(side="right")
+        desenho.create_oval(28, 4, 97, 15, outline=CLARO, width=2)
+        desenho.create_arc(28, -17, 97, 45, start=180, extent=180, style="arc", outline=CLARO, width=2)
+        desenho.create_line(52, 46, 74, 46, fill=CLARO, width=2)
+        resultado = texto(faixa, "Cadastre uma receita para calcular.", 23, True)
+        resultado.configure(fg="#fff8df")
         resultado.pack(anchor="w")
+        detalhe = texto(faixa, "", 11)
+        detalhe.configure(fg="#dfeddd")
+        detalhe.pack(anchor="w", pady=(3, 0))
         grade = tabela(p, ("Ingrediente", "Por marmita", "Em estoque", "Falta para a meta"), [])
 
         def calcular(evento=None):
@@ -250,10 +266,15 @@ class Kayode:
             alvo = numero(meta)
             capacidade, ingredientes = banco.planejar(codigo)
             resultado.config(text=f"{capacidade} marmitas possíveis")
+            restante = max(0, alvo - capacidade)
+            detalhe.configure(text=f"Faltam ingredientes para {restante} marmitas da meta." if restante
+                              else f"Há estoque suficiente para a meta de {alvo} marmitas.")
             grade.delete(*grade.get_children())
-            for alimento, porcao, saldo in ingredientes:
+            for indice, (alimento, porcao, saldo) in enumerate(ingredientes):
                 falta = max(0, alvo * porcao - saldo)
-                grade.insert("", "end", values=(alimento, f"{porcao} g", kg(saldo), kg(falta)))
+                grade.tag_configure("faltante", background="#fff0d4", foreground="#623c14")
+                cor = "faltante" if falta else ("alternada" if indice % 2 else "")
+                grade.insert("", "end", values=(alimento, f"{porcao} g", kg(saldo), kg(falta)), tags=(cor,))
             self.aviso.config(text=f"Estimativa para a meta de {alvo} marmitas.", fg=VERDE)
 
         def confirmar():
