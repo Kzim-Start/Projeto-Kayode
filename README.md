@@ -36,5 +36,6 @@ No Windows, se o comando `python` não funcionar, use `py`.
 - `banco.sql` — estrutura das tabelas.
 - `config.exemplo.ini` — modelo da conexão (crie `config.ini`).
 - `requirements.txt` — dependência Python.
+- [`DOCUMENTACAO.md`](DOCUMENTACAO.md) — diagrama ER e tutorial de uso.
 
 Projeto acadêmico. O sistema precisa de conexão com o MySQL local para funcionar.
