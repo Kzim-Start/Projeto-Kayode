@@ -111,7 +111,7 @@ class Kayode:
 
     def parceiros(self):
         p = self.pagina
-        titulo(p, "Parceiros", "Cadastre quem oferece alimentos e os locais que recebem marmitas.")
+        titulo(p, "Parceiros", "Cadastre doadores e locais de entrega.")
         f = linha(p)
         pessoa = campo(f, "Nome do parceiro")
         tipo = campo(f, "Participação", ["Doador", "Destino"])
@@ -126,7 +126,7 @@ class Kayode:
 
     def doacoes(self):
         p = self.pagina
-        titulo(p, "Doações", "Registre um alimento por lote e informe onde ele pode ser retirado.")
+        titulo(p, "Doações", "Informe o alimento, o peso e o local de retirada.")
         doadores = banco.consultar("SELECT id, nome FROM parceiro WHERE tipo='Doador' ORDER BY nome")
         alimentos = banco.consultar("SELECT nome FROM alimento ORDER BY nome")
         f = linha(p)
@@ -136,7 +136,7 @@ class Kayode:
         f = linha(p)
         local = campo(f, "Local de retirada")
         validade = campo(f, "Validade do rótulo (dd/mm/aaaa)")
-        texto(p, "Para alimentos in natura sem data no rótulo, deixe a validade em branco.", 10).pack(anchor="w")
+        texto(p, "Sem data no rótulo? Deixe a validade vazia.", 10).pack(anchor="w")
 
         def salvar():
             dia = None
@@ -160,7 +160,7 @@ class Kayode:
 
     def recebimento(self):
         p = self.pagina
-        titulo(p, "Recebimento", "Selecione um lote pendente e confira o peso que pode ser aproveitado.")
+        titulo(p, "Recebimento", "Confira o peso recebido de cada doação.")
         dados = banco.consultar("""SELECT l.id, a.nome, l.retirada, l.oferecido_g, l.validade
                                    FROM lote l JOIN alimento a ON a.id=l.alimento_id
                                    WHERE l.situacao='Pendente' ORDER BY l.id""")
@@ -181,7 +181,7 @@ class Kayode:
 
     def estoque(self):
         p = self.pagina
-        titulo(p, "Estoque", "Consulte os lotes recebidos e a prioridade de uso por validade.")
+        titulo(p, "Estoque", "Veja os alimentos disponíveis e suas validades.")
         dados = banco.consultar("""SELECT l.id, a.nome, l.saldo_g, l.validade,
                                    DATEDIFF(l.validade, CURRENT_DATE) FROM lote l
                                    JOIN alimento a ON a.id=l.alimento_id WHERE l.saldo_g > 0
@@ -198,7 +198,7 @@ class Kayode:
 
     def receitas(self):
         p = self.pagina
-        titulo(p, "Receitas", "Monte a lista de ingredientes crus e informe o peso de cada um por marmita.")
+        titulo(p, "Receitas", "Informe os ingredientes e as porções por marmita.")
         receita = campo(linha(p), "Nome da nova receita")
         alimentos = banco.consultar("SELECT nome FROM alimento ORDER BY nome")
         f = linha(p)
@@ -238,7 +238,7 @@ class Kayode:
 
     def producao(self):
         p = self.pagina
-        titulo(p, "Produção", "Escolha a receita e compare o estoque com a meta da cozinha.")
+        titulo(p, "Produção", "Calcule quantas marmitas o estoque permite.")
         receitas = banco.consultar("SELECT id, nome FROM receita ORDER BY nome")
         f = linha(p)
         receita = campo(f, "Receita", [r[1] for r in receitas])
@@ -267,8 +267,8 @@ class Kayode:
             capacidade, ingredientes = banco.planejar(codigo)
             resultado.config(text=f"{capacidade} marmitas possíveis")
             restante = max(0, alvo - capacidade)
-            detalhe.configure(text=f"Faltam ingredientes para {restante} marmitas da meta." if restante
-                              else f"Há estoque suficiente para a meta de {alvo} marmitas.")
+            detalhe.configure(text=f"Faltam insumos para {restante} marmitas." if restante
+                              else f"Estoque suficiente para {alvo} marmitas.")
             grade.delete(*grade.get_children())
             for indice, (alimento, porcao, saldo) in enumerate(ingredientes):
                 falta = max(0, alvo * porcao - saldo)
@@ -290,7 +290,7 @@ class Kayode:
 
     def distribuicao(self):
         p = self.pagina
-        titulo(p, "Distribuição", "Registre o destino e a quantidade de marmitas entregues.")
+        titulo(p, "Distribuição", "Registre a entrega das marmitas.")
         producoes = banco.consultar("""
             SELECT p.id, r.nome, p.quantidade - COALESCE(SUM(e.quantidade),0) AS disponivel
             FROM producao p JOIN receita r ON r.id=p.receita_id
