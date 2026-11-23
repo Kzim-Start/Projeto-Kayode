@@ -1,47 +1,40 @@
 # Projeto Kayode
 
-Aplicativo de **doação de alimentos e planejamento de marmitas**, desenvolvido em Python com **Tkinter e MySQL**. Registra doações, controla o estoque e ajuda a planejar refeições para distribuição social.
+Aplicativo em **Python (Tkinter + MySQL)** para registrar doações de alimentos, controlar estoque e calcular a produção de marmitas.
 
-![Tela de planejamento do Kayode](docs/planejamento.png)
+## Instalação
 
-## O que o sistema faz
+**Requisitos:** Python 3.10+ e MySQL Server 8.0.16+ instalado e em execução.
 
-- **Parceiros:** cadastra doadores e locais de entrega.
-- **Doações:** registra alimentos, quantidades e retirada.
-- **Recebimento:** confere ou recusa os lotes.
-- **Estoque:** mostra saldos e alerta sobre validade.
-- **Receitas:** define ingredientes e porções.
-- **Produção:** calcula e registra marmitas preparadas.
-- **Distribuição:** controla entregas e quantidades.
-
-## Como executar
-
-Requisitos: **Python 3.10+** e **MySQL 8.0.16+**.
-
-1. No MySQL Workbench, execute o arquivo `banco.sql`.
-2. Copie `config.exemplo.ini` para `config.ini` e informe sua conexão MySQL.
-3. Na pasta do projeto, execute:
+1. Baixe o ZIP do repositório e extraia a pasta.
+2. Abra o **MySQL Workbench**, conecte ao servidor e execute o arquivo `banco.sql`.
+3. Copie `config.exemplo.ini`, renomeie a cópia para `config.ini` e preencha o usuário e a senha do seu MySQL.
+4. Abra o terminal na pasta do projeto e execute:
 
 ```bash
 python -m pip install -r requirements.txt
 python app.py
 ```
 
-No Windows, você também pode usar `py` no lugar de `python`.
+No Windows, se o comando `python` não funcionar, use `py`.
 
-## Como funciona o cálculo
+## Funcionalidades
 
-O programa divide o **saldo de cada ingrediente** pela **quantidade necessária por marmita**. O menor resultado determina quantas refeições completas podem ser produzidas. Somente lotes recebidos e não vencidos entram no cálculo.
+- **Parceiros:** doadores e locais de entrega
+- **Doações:** cadastro de alimentos e lotes
+- **Recebimento:** conferência e aprovação
+- **Estoque:** saldos e validade
+- **Receitas:** ingredientes e porções
+- **Produção:** cálculo e preparo de marmitas
+- **Distribuição:** registro de entregas
 
-## Arquivos principais
+## Arquivos
 
-| Arquivo | Função |
-| --- | --- |
-| [app.py](app.py) | As sete telas e as ações do usuário |
-| [interface.py](interface.py) | Aparência, campos, botões e tabelas |
-| [banco.py](banco.py) | Conexão MySQL e regras do sistema |
-| [banco.sql](banco.sql) | Estrutura das oito tabelas |
+- `app.py` — telas e navegação.
+- `interface.py` — aparência e componentes.
+- `banco.py` — consultas e regras do banco.
+- `banco.sql` — estrutura das tabelas.
+- `config.exemplo.ini` — modelo da conexão (crie `config.ini`).
+- `requirements.txt` — dependência Python.
 
-**Documentação:** [Tutorial de uso](docs/tutorial.md) · [Diagrama ER](docs/diagrama-er.md) · [Vídeo de demonstração](docs/demonstracao.mp4)
-
-Projeto acadêmico. Os exemplos do tutorial utilizam dados fictícios.
+Projeto acadêmico. O sistema precisa de conexão com o MySQL local para funcionar.
