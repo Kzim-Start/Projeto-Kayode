@@ -2,6 +2,10 @@
 
 Aplicativo em **Python (Tkinter + MySQL)** para registrar doações de alimentos, controlar estoque e calcular a produção de marmitas.
 
+## Vídeo de demonstração
+
+[Assistir à demonstração das sete telas](demonstracao.mp4)
+
 ## Instalação
 
 **Requisitos:** Python 3.10+ e MySQL Server 8.0.16+ instalado e em execução.
