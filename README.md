@@ -1,46 +1,47 @@
 # Projeto Kayode
 
-Sistema de doação de alimentos e planejamento de marmitas em Pontes e Lacerda (MT). Um pequeno produtor, mercado ou comerciante informa o que pode doar. A equipe da cozinha confere a quantidade recebida, calcula quantas marmitas consegue preparar e registra a entrega a uma entidade ou ponto de distribuição.
+Aplicativo de **doação de alimentos e planejamento de marmitas**, desenvolvido em Python com **Tkinter e MySQL**. Registra doações, controla o estoque e ajuda a planejar refeições para distribuição social.
 
-Em Pontes e Lacerda, o Centro de Tecnologia Alternativa já relatou o fornecimento de alimentos da agricultura familiar à APAE pelo Programa de Aquisição de Alimentos. Essa experiência ajuda a contextualizar a proposta acadêmica. Os nomes usados no tutorial são fictícios. [Relato do CTA](https://ctamt.org.br/toda-terca-feira-paa-apae)
+![Tela de planejamento do Kayode](docs/planejamento.png)
 
-![Tela de produção com estoque para 50 marmitas](docs/planejamento.png)
+## O que o sistema faz
 
-[Assistir à demonstração das sete telas](docs/demonstracao.mp4)
+- **Parceiros:** cadastra doadores e locais de entrega.
+- **Doações:** registra alimentos, quantidades e retirada.
+- **Recebimento:** confere ou recusa os lotes.
+- **Estoque:** mostra saldos e alerta sobre validade.
+- **Receitas:** define ingredientes e porções.
+- **Produção:** calcula e registra marmitas preparadas.
+- **Distribuição:** controla entregas e quantidades.
 
-## Instalação
+## Como executar
 
-É um aplicativo de computador feito em Python com Tkinter. Use Python 3.10 ou superior e MySQL Server 8.0.16 ou superior. A interface e o servidor podem rodar no mesmo computador durante a apresentação.
+Requisitos: **Python 3.10+** e **MySQL 8.0.16+**.
 
-1. Baixe o repositório, abra o terminal na pasta do projeto e instale o conector.
+1. No MySQL Workbench, execute o arquivo `banco.sql`.
+2. Copie `config.exemplo.ini` para `config.ini` e informe sua conexão MySQL.
+3. Na pasta do projeto, execute:
 
-   ```sh
-   python -m pip install -r requirements.txt
-   ```
+```bash
+python -m pip install -r requirements.txt
+python app.py
+```
 
-2. Inicie o MySQL Server. No MySQL Workbench, abra **banco.sql** na conexão local e execute o script inteiro. Ele cria o banco `kayode` e suas oito tabelas. A conta usada para esta etapa precisa ter permissão para criar o banco e as tabelas.
-3. Faça uma cópia de **config.exemplo.ini** chamada **config.ini** na mesma pasta. Informe o usuário, a senha e a porta do seu MySQL. Para usar o aplicativo, a conta precisa consultar, inserir e atualizar registros do banco `kayode`. O arquivo com sua senha está no `.gitignore`.
-4. Inicie o Kayode.
+No Windows, você também pode usar `py` no lugar de `python`.
 
-   ```sh
-   python app.py
-   ```
+## Como funciona o cálculo
 
-No Windows, se o comando disponível for `py`, use `py -m pip install -r requirements.txt` e `py app.py`. No Debian/Ubuntu, use um ambiente virtual Python e instale o pacote `python3-tk` se o Tkinter estiver ausente.
+O programa divide o **saldo de cada ingrediente** pela **quantidade necessária por marmita**. O menor resultado determina quantas refeições completas podem ser produzidas. Somente lotes recebidos e não vencidos entram no cálculo.
 
-## Onde encontrar cada parte
+## Arquivos principais
 
-| Arquivo | Conteúdo |
+| Arquivo | Função |
 | --- | --- |
-| [app.py](app.py) | Janela principal e sete telas. Cada tela corresponde a um método com nome em português. |
-| [interface.py](interface.py) | Campos, botões e tabelas usados nas telas. |
-| [banco.py](banco.py) | Conexão MySQL, conferência de lotes, cálculo de rendimento, produção e entrega. |
-| [banco.sql](banco.sql) | Tabelas, chaves e restrições. |
-| [Diagrama ER](docs/diagrama-er.md) | Entidades, campos e relacionamentos do banco. |
-| [Tutorial e roteiro da defesa](docs/tutorial.md) | Exemplo completo com os valores para digitar e os resultados esperados. |
+| [app.py](app.py) | As sete telas e as ações do usuário |
+| [interface.py](interface.py) | Aparência, campos, botões e tabelas |
+| [banco.py](banco.py) | Conexão MySQL e regras do sistema |
+| [banco.sql](banco.sql) | Estrutura das oito tabelas |
 
-## Como o Kayode calcula
+**Documentação:** [Tutorial de uso](docs/tutorial.md) · [Diagrama ER](docs/diagrama-er.md) · [Vídeo de demonstração](docs/demonstracao.mp4)
 
-A receita indica o peso cru aproveitável de cada ingrediente por marmita. Para cada ingrediente, o programa divide o saldo em gramas pelo peso da porção e considera só as marmitas inteiras. A menor dessas quantidades define o rendimento da receita. O cálculo apenas consulta o estoque. Confirmar a produção dá baixa nos lotes e cria o saldo de marmitas para a distribuição.
-
-O aviso de sete dias ajuda a cozinha a priorizar lotes próximos da validade. A equipe registra a conferência no recebimento. Lotes pendentes, recusados ou com validade vencida ficam fora do cálculo.
+Projeto acadêmico. Os exemplos do tutorial utilizam dados fictícios.
