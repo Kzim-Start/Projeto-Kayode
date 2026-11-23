@@ -17,7 +17,7 @@ def tema():
     estilo.configure("TCombobox", padding=6, fieldbackground="white")
     estilo.map("TCombobox", fieldbackground=[("readonly", "white")])
     estilo.configure("Treeview", background="white", fieldbackground="white",
-                     foreground=TEXTO, rowheight=39, borderwidth=0)
+                     foreground=TEXTO, rowheight=35, borderwidth=0)
     estilo.configure("Treeview.Heading", background="#dde6db", foreground=TEXTO,
                      padding=8, font=(FONTE, 10, "bold"), relief="flat")
     estilo.map("Treeview", background=[("selected", VERDE)], foreground=[("selected", "white")])
@@ -30,8 +30,8 @@ def texto(pai, mensagem, tamanho=11, negrito=False):
 
 
 def titulo(pai, nome, instrucao):
-    tk.Label(pai, text=nome, bg=FUNDO, fg=TEXTO, font=("Times", 31, "bold"), anchor="w").pack(fill="x", pady=(0, 4))
-    texto(pai, instrucao).pack(fill="x", pady=(0, 18))
+    tk.Label(pai, text=nome, bg=FUNDO, fg=TEXTO, font=("Times", 27, "bold"), anchor="w").pack(fill="x", pady=(0, 4))
+    texto(pai, instrucao, 10).pack(fill="x", pady=(0, 12))
 
 
 def linha(pai):
